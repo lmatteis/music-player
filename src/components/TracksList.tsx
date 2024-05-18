@@ -5,7 +5,7 @@ import { utilsStyles } from '@/styles'
 import { useRef } from 'react'
 import { FlatList, FlatListProps, Text, View } from 'react-native'
 import FastImage from 'react-native-fast-image'
-import TrackPlayer, { Track } from 'react-native-track-player'
+import { Track } from 'react-native-track-player'
 import { QueueControls } from './QueueControls'
 
 export type TracksListProps = Partial<FlatListProps<Track>> & {
@@ -28,36 +28,39 @@ export const TracksList = ({
 	const { activeQueueId, setActiveQueueId } = useQueue()
 
 	const handleTrackSelect = async (selectedTrack: Track) => {
+		console.log(selectedTrack)
 		const trackIndex = tracks.findIndex((track) => track.url === selectedTrack.url)
 
 		if (trackIndex === -1) return
 
-		const isChangingQueue = id !== activeQueueId
+		setActiveQueueId(id)
 
-		if (isChangingQueue) {
-			const beforeTracks = tracks.slice(0, trackIndex)
-			const afterTracks = tracks.slice(trackIndex + 1)
+		// const isChangingQueue = id !== activeQueueId
 
-			await TrackPlayer.reset()
+		// if (isChangingQueue) {
+		// 	const beforeTracks = tracks.slice(0, trackIndex)
+		// 	const afterTracks = tracks.slice(trackIndex + 1)
 
-			// we construct the new queue
-			await TrackPlayer.add(selectedTrack)
-			await TrackPlayer.add(afterTracks)
-			await TrackPlayer.add(beforeTracks)
+		// 	await TrackPlayer.reset()
 
-			await TrackPlayer.play()
+		// 	// we construct the new queue
+		// 	await TrackPlayer.add(selectedTrack)
+		// 	await TrackPlayer.add(afterTracks)
+		// 	await TrackPlayer.add(beforeTracks)
 
-			queueOffset.current = trackIndex
-			setActiveQueueId(id)
-		} else {
-			const nextTrackIndex =
-				trackIndex - queueOffset.current < 0
-					? tracks.length + trackIndex - queueOffset.current
-					: trackIndex - queueOffset.current
+		// 	await TrackPlayer.play()
 
-			await TrackPlayer.skip(nextTrackIndex)
-			TrackPlayer.play()
-		}
+		// 	queueOffset.current = trackIndex
+		// 	setActiveQueueId(id)
+		// } else {
+		// 	const nextTrackIndex =
+		// 		trackIndex - queueOffset.current < 0
+		// 			? tracks.length + trackIndex - queueOffset.current
+		// 			: trackIndex - queueOffset.current
+
+		// 	await TrackPlayer.skip(nextTrackIndex)
+		// 	TrackPlayer.play()
+		// }
 	}
 
 	return (

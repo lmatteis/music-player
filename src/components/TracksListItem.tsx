@@ -23,7 +23,10 @@ export const TracksListItem = ({
 	const isActiveTrack = useActiveTrack()?.url === track.url
 
 	return (
-		<TouchableHighlight onPress={() => handleTrackSelect(track)}>
+		<TouchableHighlight
+			underlayColor={defaultStyles.container.backgroundColor}
+			onPress={() => handleTrackSelect(track)}
+		>
 			<View style={styles.trackItemContainer}>
 				<View>
 					<FastImage
@@ -68,7 +71,7 @@ export const TracksListItem = ({
 							numberOfLines={1}
 							style={{
 								...styles.trackTitleText,
-								color: isActiveTrack ? colors.primary : colors.text,
+								color: isActiveTrack ? colors.text : colors.text,
 							}}
 						>
 							{track.title}
