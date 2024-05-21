@@ -27,7 +27,7 @@ export const FloatingPlayer = ({ style }: ViewProps) => {
 			onPress={handlePress}
 			activeOpacity={0.9}
 			style={[styles.container]}
-			className="absolute top-10"
+			className="absolute top-40"
 		>
 			<>
 				<FastImage
