@@ -1,13 +1,33 @@
+import graphqlResponse from '@/assets/data/graphql-response.json'
 import { TracksList } from '@/components/TracksList'
+import { StopPropagation } from '@/components/utils/StopPropagation'
 import { screenPadding } from '@/constants/tokens'
 import { trackTitleFilter } from '@/helpers/filter'
-import { generateTracksListId } from '@/helpers/miscellaneous'
+import { formatDateString, generateTracksListId } from '@/helpers/miscellaneous'
 import { useNavigationSearch } from '@/hooks/useNavigationSearch'
 import { useTracks } from '@/store/library'
-import { defaultStyles } from '@/styles'
+import { defaultStyles, utilsStyles } from '@/styles'
+import { Entypo } from '@expo/vector-icons'
 import { useMemo } from 'react'
-import { ScrollView, View } from 'react-native'
+import { ScrollView, SectionList, Text, View } from 'react-native'
 import FastImage from 'react-native-fast-image'
+
+function groupBy<T>(collection: T[], key: keyof T) {
+	const groupedResult = collection.reduce((previous, current) => {
+		if (!previous[current[key]]) {
+			previous[current[key]] = [] as T[]
+		}
+
+		previous[current[key]].push(current)
+		return previous
+	}, {} as any) // tried to figure this out, help!!!!!
+	return groupedResult
+}
+
+const ItemDivider = () => (
+	<View style={{ ...utilsStyles.itemSeparator, marginVertical: 15, marginLeft: 0 }} />
+)
+const ItemSpacer = () => <View style={{ marginVertical: 5, marginLeft: 0 }} />
 
 const SongsScreen = () => {
 	const search = useNavigationSearch({
@@ -23,6 +43,14 @@ const SongsScreen = () => {
 
 		return tracks.filter(trackTitleFilter(search))
 	}, [search, tracks])
+
+	const groupedData = groupBy(graphqlResponse.data.program.events, 'date')
+	const groupedDatForSectionList = Object.keys(groupedData).map((key) => ({
+		title: key,
+		data: groupedData[key],
+	}))
+
+	console.log({ groupedDatForSectionList })
 
 	return (
 		<View style={defaultStyles.container}>
@@ -88,6 +116,32 @@ const SongsScreen = () => {
 						/>
 					</View>
 				</View>
+
+				<SectionList
+					className="mt-10"
+					sections={groupedDatForSectionList}
+					keyExtractor={(item, index) => item + index}
+					renderItem={({ item }) => (
+						<View className="ml-16 flex flex-row items-center justify-between gap-4">
+							<View className="flex-1">
+								<Text className="text-white font-bold tracking-tight">{item.title}</Text>
+								<Text className="text-xs text-white opacity-60 tracking-tighter">
+									{item.subtitle}
+								</Text>
+							</View>
+							<StopPropagation>
+								<Entypo name="dots-three-horizontal" size={18} color="white" />
+							</StopPropagation>
+						</View>
+					)}
+					renderSectionHeader={({ section: { title } }) => (
+						<Text className="absolute top-0 left-0 text-white opacity-60 font-bold text-sm w-14 tracking-tighter leading-tight">
+							{formatDateString(title, 'en-US')}
+						</Text>
+					)}
+					renderSectionFooter={ItemDivider}
+					ItemSeparatorComponent={ItemSpacer}
+				/>
 
 				<TracksList
 					id={generateTracksListId('songs', search)}
