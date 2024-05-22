@@ -1,98 +1,17 @@
-import { TrackShortcutsMenu } from '@/components/TrackShortcutsMenu'
-import { StopPropagation } from '@/components/utils/StopPropagation'
-import { unknownTrackImageUri } from '@/constants/images'
 import { colors, fontSize } from '@/constants/tokens'
 import { defaultStyles } from '@/styles'
-import { Entypo, Ionicons } from '@expo/vector-icons'
-import { StyleSheet, Text, TouchableHighlight, View } from 'react-native'
-import FastImage from 'react-native-fast-image'
-import LoaderKit from 'react-native-loader-kit'
-import { Track, useActiveTrack, useIsPlaying } from 'react-native-track-player'
+import { StyleSheet } from 'react-native'
 
 export type TracksListItemProps = {
-	track: Track
-	onTrackSelect: (track: Track) => void
+	track: any
+	onTrackSelect: (track: any) => void
 }
 
 export const TracksListItem = ({
 	track,
 	onTrackSelect: handleTrackSelect,
 }: TracksListItemProps) => {
-	const { playing } = useIsPlaying()
-
-	const isActiveTrack = useActiveTrack()?.url === track.url
-
-	return (
-		<TouchableHighlight
-			underlayColor={defaultStyles.container.backgroundColor}
-			onPress={() => handleTrackSelect(track)}
-		>
-			<View style={styles.trackItemContainer}>
-				<View>
-					<FastImage
-						source={{
-							uri: track.artwork ?? unknownTrackImageUri,
-							priority: FastImage.priority.normal,
-						}}
-						style={{
-							...styles.trackArtworkImage,
-							opacity: isActiveTrack ? 0.6 : 1,
-						}}
-					/>
-
-					{isActiveTrack &&
-						(playing ? (
-							<LoaderKit
-								style={styles.trackPlayingIconIndicator}
-								name="LineScaleParty"
-								color={colors.icon}
-							/>
-						) : (
-							<Ionicons
-								style={styles.trackPausedIndicator}
-								name="play"
-								size={24}
-								color={colors.icon}
-							/>
-						))}
-				</View>
-
-				<View
-					style={{
-						flex: 1,
-						flexDirection: 'row',
-						justifyContent: 'space-between',
-						alignItems: 'center',
-					}}
-				>
-					{/* Track title + artist */}
-					<View style={{ width: '100%' }}>
-						<Text
-							numberOfLines={1}
-							style={{
-								...styles.trackTitleText,
-								color: isActiveTrack ? colors.text : colors.text,
-							}}
-						>
-							{track.title}
-						</Text>
-
-						{track.artist && (
-							<Text numberOfLines={1} style={styles.trackArtistText}>
-								{track.artist}
-							</Text>
-						)}
-					</View>
-
-					<StopPropagation>
-						<TrackShortcutsMenu track={track}>
-							<Entypo name="dots-three-horizontal" size={18} color={colors.icon} />
-						</TrackShortcutsMenu>
-					</StopPropagation>
-				</View>
-			</View>
-		</TouchableHighlight>
-	)
+	return null
 }
 
 const styles = StyleSheet.create({

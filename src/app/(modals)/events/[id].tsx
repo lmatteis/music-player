@@ -1,15 +1,14 @@
 import { MovingText } from '@/components/MovingText'
 import { unknownTrackImageUri } from '@/constants/images'
 import { colors, fontSize, screenPadding } from '@/constants/tokens'
-import { usePlayerBackground } from '@/hooks/usePlayerBackground'
 import { GET_EVENTS } from '@/queries/GET_EVENTS'
 import { client } from '@/queries/client'
 import { defaultStyles } from '@/styles'
 import { Ionicons } from '@expo/vector-icons'
+import { Image } from 'expo-image'
 import { LinearGradient } from 'expo-linear-gradient'
 import { useLocalSearchParams } from 'expo-router'
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native'
-import FastImage from 'react-native-fast-image'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
@@ -22,7 +21,7 @@ const PlayerScreen = () => {
 
 	const activeEvent = events.find((e) => e.id === id)
 
-	const { imageColors } = usePlayerBackground(activeEvent?.image[0].mobile ?? unknownTrackImageUri)
+	// const { imageColors } = usePlayerBackground(activeEvent?.image[0].mobile ?? unknownTrackImageUri)
 
 	const { top, bottom } = useSafeAreaInsets()
 
@@ -35,19 +34,15 @@ const PlayerScreen = () => {
 	}
 
 	return (
-		<LinearGradient
-			style={{ flex: 1 }}
-			colors={imageColors ? [imageColors.background, imageColors.primary] : [colors.background]}
-		>
+		<LinearGradient style={{ flex: 1 }} colors={[colors.background]}>
 			<View style={styles.overlayContainer}>
 				<DismissPlayerSymbol />
 
 				<View style={{ flex: 1, marginTop: top + 70, marginBottom: bottom }} className="gap-10">
 					<View style={styles.artworkImageContainer}>
-						<FastImage
+						<Image
 							source={{
 								uri: activeEvent?.image[0].desktopXL2x ?? unknownTrackImageUri,
-								priority: FastImage.priority.high,
 							}}
 							resizeMode="cover"
 							style={styles.artworkImage}

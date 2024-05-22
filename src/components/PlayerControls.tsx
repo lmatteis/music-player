@@ -1,7 +1,6 @@
 import { colors } from '@/constants/tokens'
 import { FontAwesome6 } from '@expo/vector-icons'
 import { StyleSheet, TouchableOpacity, View, ViewStyle } from 'react-native'
-import TrackPlayer, { useIsPlaying } from 'react-native-track-player'
 
 type PlayerControlsProps = {
 	style?: ViewStyle
@@ -13,6 +12,7 @@ type PlayerButtonProps = {
 }
 
 export const PlayerControls = ({ style }: PlayerControlsProps) => {
+	return null
 	return (
 		<View style={[styles.container, style]}>
 			<View style={styles.row}>

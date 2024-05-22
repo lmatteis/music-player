@@ -1,13 +1,12 @@
 import library from '@/assets/data/library.json'
 import { unknownTrackImageUri } from '@/constants/images'
 import { Artist, Playlist, TrackWithPlaylist } from '@/helpers/types'
-import { Track } from 'react-native-track-player'
 import { create } from 'zustand'
 
 interface LibraryState {
 	tracks: TrackWithPlaylist[]
-	toggleTrackFavorite: (track: Track) => void
-	addToPlaylist: (track: Track, playlistName: string) => void
+	toggleTrackFavorite: (track: any) => void
+	addToPlaylist: (track: any, playlistName: string) => void
 }
 
 export const useLibraryStore = create<LibraryState>()((set) => ({
