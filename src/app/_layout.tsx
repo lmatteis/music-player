@@ -42,7 +42,7 @@ const RootNavigation = () => {
 			<Stack.Screen name="(tabs)" options={{ headerShown: false }} />
 
 			<Stack.Screen
-				name="player"
+				name="(modals)/events/[id]"
 				options={{
 					presentation: 'modal',
 					gestureEnabled: true,

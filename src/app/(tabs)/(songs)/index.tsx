@@ -1,16 +1,17 @@
 import graphqlResponse from '@/assets/data/graphql-response.json'
-import { TracksList } from '@/components/TracksList'
 import { StopPropagation } from '@/components/utils/StopPropagation'
 import { screenPadding } from '@/constants/tokens'
 import { trackTitleFilter } from '@/helpers/filter'
-import { formatDateString, generateTracksListId } from '@/helpers/miscellaneous'
+import { formatDateString } from '@/helpers/miscellaneous'
 import { useNavigationSearch } from '@/hooks/useNavigationSearch'
 import { useTracks } from '@/store/library'
 import { defaultStyles, utilsStyles } from '@/styles'
 import { Entypo } from '@expo/vector-icons'
+import { useRouter } from 'expo-router'
 import { useMemo } from 'react'
 import { ScrollView, SectionList, Text, View } from 'react-native'
 import FastImage from 'react-native-fast-image'
+import { TouchableHighlight } from 'react-native-gesture-handler'
 
 function groupBy<T>(collection: T[], key: keyof T) {
 	const groupedResult = collection.reduce((previous, current) => {
@@ -36,6 +37,7 @@ const SongsScreen = () => {
 		},
 	})
 
+	const router = useRouter()
 	const tracks = useTracks()
 
 	const filteredTracks = useMemo(() => {
@@ -50,7 +52,9 @@ const SongsScreen = () => {
 		data: groupedData[key],
 	}))
 
-	console.log({ groupedDatForSectionList })
+	const handleEventSelect = async (selectedEvent) => {
+		router.push(`/(modals)/events/${selectedEvent.id}`)
+	}
 
 	return (
 		<View style={defaultStyles.container}>
@@ -122,17 +126,22 @@ const SongsScreen = () => {
 					sections={groupedDatForSectionList}
 					keyExtractor={(item, index) => item + index}
 					renderItem={({ item }) => (
-						<View className="ml-16 flex flex-row items-center justify-between gap-4">
-							<View className="flex-1">
-								<Text className="text-white font-bold tracking-tight">{item.title}</Text>
-								<Text className="text-xs text-white opacity-60 tracking-tighter">
-									{item.subtitle}
-								</Text>
+						<TouchableHighlight
+							underlayColor={defaultStyles.container.backgroundColor}
+							onPress={() => handleEventSelect(item)}
+						>
+							<View className="ml-16 flex flex-row items-center justify-between gap-4">
+								<View className="flex-1">
+									<Text className="text-white font-bold tracking-tight">{item.title}</Text>
+									<Text className="text-xs text-white opacity-60 tracking-tighter">
+										{item.subtitle}
+									</Text>
+								</View>
+								<StopPropagation>
+									<Entypo name="dots-three-horizontal" size={18} color="white" />
+								</StopPropagation>
 							</View>
-							<StopPropagation>
-								<Entypo name="dots-three-horizontal" size={18} color="white" />
-							</StopPropagation>
-						</View>
+						</TouchableHighlight>
 					)}
 					renderSectionHeader={({ section: { title } }) => (
 						<Text className="absolute top-0 left-0 text-white opacity-60 font-bold text-sm w-14 tracking-tighter leading-tight">
@@ -143,11 +152,11 @@ const SongsScreen = () => {
 					ItemSeparatorComponent={ItemSpacer}
 				/>
 
-				<TracksList
+				{/* <TracksList
 					id={generateTracksListId('songs', search)}
 					tracks={filteredTracks}
 					scrollEnabled={false}
-				/>
+				/> */}
 			</ScrollView>
 		</View>
 	)
