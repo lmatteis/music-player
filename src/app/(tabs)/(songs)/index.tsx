@@ -9,7 +9,7 @@ import { defaultStyles, utilsStyles } from '@/styles'
 import { Entypo } from '@expo/vector-icons'
 import { useRouter } from 'expo-router'
 import { useMemo } from 'react'
-import { ScrollView, SectionList, Text, View } from 'react-native'
+import { ActivityIndicator, SectionList, Text, View } from 'react-native'
 import FastImage from 'react-native-fast-image'
 import { TouchableHighlight } from 'react-native-gesture-handler'
 
@@ -58,106 +58,106 @@ const SongsScreen = () => {
 
 	return (
 		<View style={defaultStyles.container}>
-			<ScrollView
+			<SectionList
+				className="mt-10"
 				contentInsetAdjustmentBehavior="automatic"
-				style={{ paddingHorizontal: screenPadding.horizontal }}
-			>
-				<View className="h-96 flex-row">
-					<View className="w-[70%]">
-						<FastImage
-							source={{
-								uri: 'https://assets.paradiso.nl/images/transforms/event/_1200x900_crop_center-center_none/2256178/Pommelien-Cropped.webp',
-								priority: FastImage.priority.normal,
-							}}
-							style={{
-								width: '100%',
-								height: '70%',
-							}}
-						/>
-						<View className="flex-row h-[30%] w-full">
+				style={{
+					paddingHorizontal: screenPadding.horizontal,
+				}}
+				sections={groupedDatForSectionList}
+				keyExtractor={(item, index) => item + index}
+				renderItem={({ item }) => (
+					<TouchableHighlight
+						underlayColor={defaultStyles.container.backgroundColor}
+						onPress={() => handleEventSelect(item)}
+					>
+						<View className="ml-16 flex flex-row items-center justify-between gap-4">
+							<View className="flex-1">
+								<Text className="text-white font-bold tracking-tight">{item.title}</Text>
+								<Text className="text-xs text-white opacity-60 tracking-tighter">
+									{item.subtitle}
+								</Text>
+							</View>
+							<StopPropagation>
+								<Entypo name="dots-three-horizontal" size={18} color="white" />
+							</StopPropagation>
+						</View>
+					</TouchableHighlight>
+				)}
+				renderSectionHeader={({ section: { title } }) => (
+					<Text className="absolute top-0 left-0 text-white opacity-60 font-bold text-sm w-14 tracking-tighter leading-tight">
+						{formatDateString(title, 'en-US')}
+					</Text>
+				)}
+				renderSectionFooter={ItemDivider}
+				ItemSeparatorComponent={ItemSpacer}
+				ListHeaderComponent={() => (
+					<View className="h-96 flex-row mb-10">
+						<View className="w-[70%]">
 							<FastImage
 								source={{
-									uri: 'https://assets.paradiso.nl/images/transforms/event/_800x800_crop_center-center_none/2256199/file-1.webp',
+									uri: 'https://assets.paradiso.nl/images/transforms/event/_1200x900_crop_center-center_none/2256178/Pommelien-Cropped.webp',
 									priority: FastImage.priority.normal,
 								}}
 								style={{
-									width: '50%',
-									height: '100%',
+									width: '100%',
+									height: '70%',
+								}}
+							/>
+							<View className="flex-row h-[30%] w-full">
+								<FastImage
+									source={{
+										uri: 'https://assets.paradiso.nl/images/transforms/event/_800x800_crop_center-center_none/2256199/file-1.webp',
+										priority: FastImage.priority.normal,
+									}}
+									style={{
+										width: '50%',
+										height: '100%',
+									}}
+								/>
+								<FastImage
+									source={{
+										uri: 'https://assets.paradiso.nl/images/transforms/event/_800x800_crop_center-center_none/2236764/JBEAN-2024-TraumaticLivelihoodNATour-Photo-HiRes-Retouched-Pink.webp',
+										priority: FastImage.priority.normal,
+									}}
+									style={{
+										width: '50%',
+										height: '100%',
+									}}
+								/>
+							</View>
+						</View>
+						<View className="w-[30%]">
+							<FastImage
+								source={{
+									uri: 'https://assets.paradiso.nl/images/transforms/event/_800x800_crop_center-center_none/2256253/TheMysterines-web.webp',
+									priority: FastImage.priority.normal,
+								}}
+								style={{
+									width: '100%',
+									height: '50%',
 								}}
 							/>
 							<FastImage
 								source={{
-									uri: 'https://assets.paradiso.nl/images/transforms/event/_800x800_crop_center-center_none/2236764/JBEAN-2024-TraumaticLivelihoodNATour-Photo-HiRes-Retouched-Pink.webp',
+									uri: 'https://assets.paradiso.nl/images/transforms/event/_800x1200_crop_center-center_none/2244543/HATH_CA_X100F_6565-1.webp',
 									priority: FastImage.priority.normal,
 								}}
 								style={{
-									width: '50%',
-									height: '100%',
+									width: '100%',
+									height: '50%',
 								}}
 							/>
 						</View>
 					</View>
-					<View className="w-[30%]">
-						<FastImage
-							source={{
-								uri: 'https://assets.paradiso.nl/images/transforms/event/_800x800_crop_center-center_none/2256253/TheMysterines-web.webp',
-								priority: FastImage.priority.normal,
-							}}
-							style={{
-								width: '100%',
-								height: '50%',
-							}}
-						/>
-						<FastImage
-							source={{
-								uri: 'https://assets.paradiso.nl/images/transforms/event/_800x1200_crop_center-center_none/2244543/HATH_CA_X100F_6565-1.webp',
-								priority: FastImage.priority.normal,
-							}}
-							style={{
-								width: '100%',
-								height: '50%',
-							}}
-						/>
+				)}
+				ListFooterComponent={() => (
+					<View className="mb-10">
+						<ActivityIndicator className="text-white" />
 					</View>
-				</View>
-
-				<SectionList
-					className="mt-10"
-					sections={groupedDatForSectionList}
-					keyExtractor={(item, index) => item + index}
-					renderItem={({ item }) => (
-						<TouchableHighlight
-							underlayColor={defaultStyles.container.backgroundColor}
-							onPress={() => handleEventSelect(item)}
-						>
-							<View className="ml-16 flex flex-row items-center justify-between gap-4">
-								<View className="flex-1">
-									<Text className="text-white font-bold tracking-tight">{item.title}</Text>
-									<Text className="text-xs text-white opacity-60 tracking-tighter">
-										{item.subtitle}
-									</Text>
-								</View>
-								<StopPropagation>
-									<Entypo name="dots-three-horizontal" size={18} color="white" />
-								</StopPropagation>
-							</View>
-						</TouchableHighlight>
-					)}
-					renderSectionHeader={({ section: { title } }) => (
-						<Text className="absolute top-0 left-0 text-white opacity-60 font-bold text-sm w-14 tracking-tighter leading-tight">
-							{formatDateString(title, 'en-US')}
-						</Text>
-					)}
-					renderSectionFooter={ItemDivider}
-					ItemSeparatorComponent={ItemSpacer}
-				/>
-
-				{/* <TracksList
-					id={generateTracksListId('songs', search)}
-					tracks={filteredTracks}
-					scrollEnabled={false}
-				/> */}
-			</ScrollView>
+				)}
+				onEndReached={(data) => console.log(data)}
+			/>
 		</View>
 	)
 }
