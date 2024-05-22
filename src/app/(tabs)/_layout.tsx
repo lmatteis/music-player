@@ -37,6 +37,13 @@ const TabsNavigation = () => {
 				}}
 			>
 				<Tabs.Screen
+					name="(songs)"
+					options={{
+						title: 'Events',
+						tabBarIcon: ({ color }) => <Ionicons name="calendar" size={24} color={color} />,
+					}}
+				/>
+				<Tabs.Screen
 					name="favorites"
 					options={{
 						title: 'Favorites',
@@ -52,15 +59,7 @@ const TabsNavigation = () => {
 						),
 					}}
 				/>
-				<Tabs.Screen
-					name="(songs)"
-					options={{
-						title: 'Songs',
-						tabBarIcon: ({ color }) => (
-							<Ionicons name="musical-notes-sharp" size={24} color={color} />
-						),
-					}}
-				/>
+
 				<Tabs.Screen
 					name="artists"
 					options={{

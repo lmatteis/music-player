@@ -4,10 +4,12 @@ import { unknownTrackImageUri } from '@/constants/images'
 import { colors, fontSize, screenPadding } from '@/constants/tokens'
 import { usePlayerBackground } from '@/hooks/usePlayerBackground'
 import { defaultStyles } from '@/styles'
+import { Ionicons } from '@expo/vector-icons'
 import { LinearGradient } from 'expo-linear-gradient'
 import { useLocalSearchParams } from 'expo-router'
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native'
 import FastImage from 'react-native-fast-image'
+import { TouchableOpacity } from 'react-native-gesture-handler'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 const PlayerScreen = () => {
@@ -37,7 +39,7 @@ const PlayerScreen = () => {
 			<View style={styles.overlayContainer}>
 				<DismissPlayerSymbol />
 
-				<View style={{ flex: 1, marginTop: top + 70, marginBottom: bottom }}>
+				<View style={{ flex: 1, marginTop: top + 70, marginBottom: bottom }} className="gap-10">
 					<View style={styles.artworkImageContainer}>
 						<FastImage
 							source={{
@@ -49,7 +51,7 @@ const PlayerScreen = () => {
 						/>
 					</View>
 
-					<View style={{ flex: 1 }}>
+					<View style={{ flex: 1 }} className="gap-10">
 						<View style={{ marginTop: 'auto' }}>
 							<View style={{ height: 60 }}>
 								<View
@@ -76,6 +78,12 @@ const PlayerScreen = () => {
 									</Text>
 								)}
 							</View>
+						</View>
+						<View style={{ flex: 1 }}>
+							<TouchableOpacity activeOpacity={0.8} style={styles.button}>
+								<Text className="text-white">Buy tickets</Text>
+								<Ionicons name="arrow-forward" size={22} color={colors.primary} />
+							</TouchableOpacity>
 						</View>
 
 						{/* <View style={utilsStyles.centeredRow}>
@@ -153,6 +161,22 @@ const styles = StyleSheet.create({
 		fontSize: fontSize.base,
 		opacity: 0.8,
 		maxWidth: '90%',
+	},
+	button: {
+		padding: 12,
+		backgroundColor: 'rgba(47, 47, 47, 0.5)',
+		borderRadius: 8,
+		flexDirection: 'row',
+		justifyContent: 'center',
+		alignItems: 'center',
+		columnGap: 8,
+	},
+	buttonText: {
+		...defaultStyles.text,
+		color: colors.primary,
+		fontWeight: '600',
+		fontSize: 18,
+		textAlign: 'center',
 	},
 })
 
