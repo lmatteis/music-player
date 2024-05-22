@@ -2,6 +2,7 @@ import { playbackService } from '@/constants/playbackService'
 import { colors } from '@/constants/tokens'
 import { useLogTrackPlayerState } from '@/hooks/useLogTrackPlayerState'
 import { useSetupTrackPlayer } from '@/hooks/useSetupTrackPlayer'
+import { ApolloProvider } from '@apollo/client'
 import { SplashScreen, Stack } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 import { useCallback } from 'react'
@@ -9,6 +10,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import TrackPlayer from 'react-native-track-player'
 import '../global.css'
+import { client } from '../queries/client'
 
 SplashScreen.preventAutoHideAsync()
 
@@ -26,13 +28,15 @@ const App = () => {
 	useLogTrackPlayerState()
 
 	return (
-		<SafeAreaProvider>
-			<GestureHandlerRootView style={{ flex: 1 }}>
-				<RootNavigation />
+		<ApolloProvider client={client}>
+			<SafeAreaProvider>
+				<GestureHandlerRootView style={{ flex: 1 }}>
+					<RootNavigation />
 
-				<StatusBar style="auto" />
-			</GestureHandlerRootView>
-		</SafeAreaProvider>
+					<StatusBar style="auto" />
+				</GestureHandlerRootView>
+			</SafeAreaProvider>
+		</ApolloProvider>
 	)
 }
 

@@ -1,4 +1,3 @@
-import graphqlResponse from '@/assets/data/graphql-response.json'
 import { StopPropagation } from '@/components/utils/StopPropagation'
 import { screenPadding } from '@/constants/tokens'
 import { trackTitleFilter } from '@/helpers/filter'
@@ -6,12 +5,14 @@ import { formatDateString } from '@/helpers/miscellaneous'
 import { useNavigationSearch } from '@/hooks/useNavigationSearch'
 import { useTracks } from '@/store/library'
 import { defaultStyles, utilsStyles } from '@/styles'
+import { useQuery } from '@apollo/client'
 import { Entypo } from '@expo/vector-icons'
 import { useRouter } from 'expo-router'
 import { useMemo } from 'react'
 import { ActivityIndicator, SectionList, Text, View } from 'react-native'
 import FastImage from 'react-native-fast-image'
 import { TouchableHighlight } from 'react-native-gesture-handler'
+import { GET_EVENTS } from '../../../queries/GET_EVENTS'
 
 function groupBy<T>(collection: T[], key: keyof T) {
 	const groupedResult = collection.reduce((previous, current) => {
@@ -40,21 +41,38 @@ const SongsScreen = () => {
 	const router = useRouter()
 	const tracks = useTracks()
 
+	const { data, error, loading, fetchMore } = useQuery(GET_EVENTS, {
+		variables: {
+			site: 'paradisoEnglish',
+			size: 50,
+			gteStartDateTime: '2024-05-22',
+			lteStartDateTime: null,
+			searchAfter: null,
+			location: null,
+			subBrand: null,
+			contentCategory: null,
+		},
+	})
+
 	const filteredTracks = useMemo(() => {
 		if (!search) return tracks
 
 		return tracks.filter(trackTitleFilter(search))
 	}, [search, tracks])
 
-	const groupedData = groupBy(graphqlResponse.data.program.events, 'date')
+	const handleEventSelect = async (selectedEvent) => {
+		router.push(`/(modals)/events/${selectedEvent.id}`)
+	}
+
+	console.log({ data })
+
+	if (!data) return null
+
+	const groupedData = groupBy(data.program.events, 'date')
 	const groupedDatForSectionList = Object.keys(groupedData).map((key) => ({
 		title: key,
 		data: groupedData[key],
 	}))
-
-	const handleEventSelect = async (selectedEvent) => {
-		router.push(`/(modals)/events/${selectedEvent.id}`)
-	}
 
 	return (
 		<View style={defaultStyles.container}>
@@ -156,7 +174,11 @@ const SongsScreen = () => {
 						<ActivityIndicator className="text-white" />
 					</View>
 				)}
-				onEndReached={(data) => console.log(data)}
+				onEndReached={(_data) =>
+					fetchMore({
+						variables: { searchAfter: data.program.events[data.program.events.length - 1].sort },
+					})
+				}
 			/>
 		</View>
 	)

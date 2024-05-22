@@ -1,8 +1,9 @@
-import graphqlResponse from '@/assets/data/graphql-response.json'
 import { MovingText } from '@/components/MovingText'
 import { unknownTrackImageUri } from '@/constants/images'
 import { colors, fontSize, screenPadding } from '@/constants/tokens'
 import { usePlayerBackground } from '@/hooks/usePlayerBackground'
+import { GET_EVENTS } from '@/queries/GET_EVENTS'
+import { client } from '@/queries/client'
 import { defaultStyles } from '@/styles'
 import { Ionicons } from '@expo/vector-icons'
 import { LinearGradient } from 'expo-linear-gradient'
@@ -15,7 +16,9 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 const PlayerScreen = () => {
 	const { id } = useLocalSearchParams<{ id: string }>()
 
-	const events = graphqlResponse.data.program.events
+	const data = client.readQuery({ query: GET_EVENTS })
+
+	const events = data.program.events
 
 	const activeEvent = events.find((e) => e.id === id)
 
