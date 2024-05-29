@@ -6,7 +6,6 @@ import { client } from '@/queries/client'
 import { defaultStyles } from '@/styles'
 import { Ionicons } from '@expo/vector-icons'
 import { Image } from 'expo-image'
-import { LinearGradient } from 'expo-linear-gradient'
 import { useLocalSearchParams } from 'expo-router'
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
@@ -34,63 +33,61 @@ const PlayerScreen = () => {
 	}
 
 	return (
-		<LinearGradient style={{ flex: 1 }} colors={[colors.background]}>
-			<View style={styles.overlayContainer}>
-				<DismissPlayerSymbol />
+		<View style={styles.overlayContainer}>
+			<DismissPlayerSymbol />
 
-				<View style={{ flex: 1, marginTop: top + 70, marginBottom: bottom }} className="gap-10">
-					<View style={styles.artworkImageContainer}>
-						<Image
-							source={{
-								uri: activeEvent?.image[0].desktopXL2x ?? unknownTrackImageUri,
-							}}
-							resizeMode="cover"
-							style={styles.artworkImage}
-						/>
+			<View style={{ flex: 1, marginTop: top + 70, marginBottom: bottom }} className="gap-10">
+				<View style={styles.artworkImageContainer}>
+					<Image
+						source={{
+							uri: activeEvent?.image[0].desktopXL2x ?? unknownTrackImageUri,
+						}}
+						resizeMode="cover"
+						style={styles.artworkImage}
+					/>
+				</View>
+
+				<View style={{ flex: 1 }} className="gap-10">
+					<View style={{ marginTop: 'auto' }}>
+						<View style={{ height: 60 }}>
+							<View
+								style={{
+									flexDirection: 'row',
+									justifyContent: 'space-between',
+									alignItems: 'center',
+								}}
+							>
+								{/* Track title */}
+								<View style={styles.trackTitleContainer}>
+									<MovingText
+										text={activeEvent.title ?? ''}
+										animationThreshold={30}
+										style={styles.trackTitleText}
+									/>
+								</View>
+							</View>
+
+							{/* Track artist */}
+							{activeEvent.subtitle && (
+								<Text numberOfLines={1} style={[styles.trackArtistText, { marginTop: 6 }]}>
+									{activeEvent.subtitle}
+								</Text>
+							)}
+						</View>
+					</View>
+					<View style={{ flex: 1 }}>
+						<TouchableOpacity activeOpacity={0.8} style={styles.button} className="rounded">
+							<Text className="text-white">Buy tickets</Text>
+							<Ionicons name="arrow-forward" size={22} color={colors.primary} />
+						</TouchableOpacity>
 					</View>
 
-					<View style={{ flex: 1 }} className="gap-10">
-						<View style={{ marginTop: 'auto' }}>
-							<View style={{ height: 60 }}>
-								<View
-									style={{
-										flexDirection: 'row',
-										justifyContent: 'space-between',
-										alignItems: 'center',
-									}}
-								>
-									{/* Track title */}
-									<View style={styles.trackTitleContainer}>
-										<MovingText
-											text={activeEvent.title ?? ''}
-											animationThreshold={30}
-											style={styles.trackTitleText}
-										/>
-									</View>
-								</View>
-
-								{/* Track artist */}
-								{activeEvent.subtitle && (
-									<Text numberOfLines={1} style={[styles.trackArtistText, { marginTop: 6 }]}>
-										{activeEvent.subtitle}
-									</Text>
-								)}
-							</View>
-						</View>
-						<View style={{ flex: 1 }}>
-							<TouchableOpacity activeOpacity={0.8} style={styles.button}>
-								<Text className="text-white">Buy tickets</Text>
-								<Ionicons name="arrow-forward" size={22} color={colors.primary} />
-							</TouchableOpacity>
-						</View>
-
-						{/* <View style={utilsStyles.centeredRow}>
+					{/* <View style={utilsStyles.centeredRow}>
 							<PlayerRepeatToggle size={30} style={{ marginBottom: 6 }} />
 						</View> */}
-					</View>
 				</View>
 			</View>
-		</LinearGradient>
+		</View>
 	)
 }
 

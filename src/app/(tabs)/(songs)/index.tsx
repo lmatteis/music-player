@@ -26,6 +26,14 @@ function groupBy<T>(collection: T[], key: keyof T) {
 	return groupedResult
 }
 
+const getCurrentDate = () => {
+	const today = new Date()
+	const year = today.getFullYear()
+	const month = String(today.getMonth() + 1).padStart(2, '0') // Months are zero-based, so add 1
+	const day = String(today.getDate()).padStart(2, '0')
+	return `${year}-${month}-${day}`
+}
+
 const ItemDivider = () => (
 	<View style={{ ...utilsStyles.itemSeparator, marginVertical: 15, marginLeft: 0 }} />
 )
@@ -45,7 +53,7 @@ const SongsScreen = () => {
 		variables: {
 			site: 'paradisoEnglish',
 			size: 50,
-			gteStartDateTime: '2024-05-22',
+			gteStartDateTime: getCurrentDate(),
 			lteStartDateTime: null,
 			searchAfter: null,
 			location: null,
@@ -75,7 +83,7 @@ const SongsScreen = () => {
 	}))
 
 	return (
-		<View style={defaultStyles.container}>
+		<View style={defaultStyles.container} className="bg-black">
 			<SectionList
 				className="mt-10"
 				contentInsetAdjustmentBehavior="automatic"
