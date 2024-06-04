@@ -104,6 +104,7 @@ const DismissPlayerSymbol = () => {
 				flexDirection: 'row',
 				justifyContent: 'center',
 			}}
+			className="android:hidden"
 		>
 			<View
 				accessible={false}

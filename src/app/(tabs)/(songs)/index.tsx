@@ -90,6 +90,7 @@ const SongsScreen = () => {
 				style={{
 					paddingHorizontal: screenPadding.horizontal,
 				}}
+				windowSize={100}
 				sections={groupedDatForSectionList}
 				keyExtractor={(item, index) => item + index}
 				renderItem={({ item }) => (
